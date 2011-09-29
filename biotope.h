@@ -1,3 +1,6 @@
+#ifndef _BIOTOPE_H_
+#define _BIOTOPE_H_
+
 #include "life_point.h"
 
 typedef struct _biotope_{
@@ -14,4 +17,6 @@ typedef struct _biotope_{
  * @return:
  		pointer to biotope 
 */
-biotope* init_biotope(int max_x,int max_y,char* filename);
+biotope* init_biotope(int max_x,int max_y);
+
+#endif

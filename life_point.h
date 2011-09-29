@@ -1,4 +1,5 @@
-
+#ifndef _LIFE_POINT_H_
+#define _LIFE_POINT_H_
 typedef struct _life_point_{
 	int now;
 	int then;
@@ -49,3 +50,5 @@ void next_generation(life_point *this);
  *          1 - if life at this point exists now
  */
 int is_living(life_point *this);
+
+#endif   // _LIFE_POINT_H_

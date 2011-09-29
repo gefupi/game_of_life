@@ -12,7 +12,8 @@ int main(int argc, char **argv) {
 	char* filename=NULL;
   // Parse Opts
   int c;
-  while ((c = getopt(argc, argv, "vdx:y:hb:g:")) != -1) {
+  // TODO fix output for non existing options and not given argument vor options like -b without file
+  while ((c = getopt(argc, argv, ":vdx:y:hb:g:")) != -1) {
   	switch (c){
 	  	case 'h':
 	  		printf("-h            : print this help\n");

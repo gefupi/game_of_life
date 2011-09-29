@@ -51,4 +51,8 @@ void next_generation(life_point *this);
  */
 int is_living(life_point *this);
 
+
+// TODO: add setter function for biotope initialization
+
+
 #endif   // _LIFE_POINT_H_

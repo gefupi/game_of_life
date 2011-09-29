@@ -19,4 +19,13 @@ typedef struct _biotope_{
 */
 biotope* init_biotope(int max_x,int max_y);
 
+
+void destroy_biotope(biotope *this);
+
+void set_max_generation(biotope *this, int max_generations);
+
+void set_life_point_value(biotope *this, int x, int y, int life_value);
+
+void start_living();
+
 #endif

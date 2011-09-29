@@ -14,3 +14,21 @@ biotope* init_biotope(int max_x,int max_y){
 	this->max_x=max_x;
 	this->max_y=max_y;
 }
+
+
+void destroy_biotope(biotope *this) {
+  // TODO: implement this function
+}
+
+
+void set_max_generation(biotope *this, int max_generations) {
+  // TODO: implement this function
+}
+
+void set_life_point_value(biotope *this, int x, int y, int life_value) {
+  // TODO: implement this function
+}
+
+void start_living(biotope *this) {
+  // TODO: implement this function
+}

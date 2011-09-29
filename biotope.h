@@ -1,12 +1,12 @@
 
-typdef struct _life_point_{
+typedef struct _life_point_{
 	int now;
 	int then;
 } life_point;
 
-struct _biotope_{
-	int x;
-	int y;
-	life_point* field;
+typedef struct _biotope_{
+	int max_x;
+	int max_y;
+	life_point** field;
 } biotope;
 

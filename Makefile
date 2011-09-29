@@ -1,14 +1,14 @@
 OUT=gameOfLife
 CC=gcc
-OBJS=main.o
+OBJS=game_of_life.o
 CFLAGS=-Wall 
 
 
 $(OUT):$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS)
 
-main.o: main.c
-	$(CC) -c main.c
+main.o: game_of_life.c std_const.h
+	$(CC) -c game_of_life.c
 
 clean:
 	rm *.o $(OUT) >> /dev/null

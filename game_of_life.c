@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv) {
 
-
+  // TODO: parse options
 
   return (EXIT_SUCCESS);
 }

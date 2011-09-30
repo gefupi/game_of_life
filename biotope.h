@@ -4,9 +4,14 @@
 #include "life_point.h"
 
 typedef struct _biotope_{
-	int max_x;
-	int max_y;
-	struct _life_point_ **field;
+  int max_x;
+  int max_y;
+  life_point ***field;
+  unsigned int generation;
+  unsigned int population;
+  unsigned int max_generation;
+  unsigned int population_maximum;
+  unsigned int generation_of_population_maximum;
 } biotope;
 
 /* Constuctor for the "biotop onject"
@@ -17,10 +22,10 @@ typedef struct _biotope_{
  * @return:
  		pointer to biotope 
 */
-biotope* init_biotope(int max_x,int max_y);
+biotope* init_biotope(int max_x, int max_y);
 
 
-void destroy_biotope(biotope *this);
+void destroy_biotope(biotope **this);
 
 void set_max_generation(biotope *this, int max_generations);
 

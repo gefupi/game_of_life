@@ -14,7 +14,7 @@ typedef struct _life_point_{
  * @return: pointer to the new life_point object
  *          OR zero if an error occured (e.g. out of memory, ...)
  */
-life_point *init_life_point(int life_value);
+life_point *create_life_point(int life_value);
 
 /*
  * this function destroys the life_point object wich is pointed to, which means 
@@ -40,7 +40,6 @@ void calculate_next_generation(life_point *this, int living_neighbours);
  * @error: if no value has been calculated befor this function is called 
  *         exit(EXIT_FAILURE) will be called
  */
-//--------------------------------------------------------------------------------
 void next_generation(life_point *this);
 
 /*
@@ -52,7 +51,7 @@ void next_generation(life_point *this);
 int is_living(life_point *this);
 
 
-// TODO: add setter function for biotope initialization
-
+// TODO: add documentation here
+void set_life_value(life_point *this, int life_value);
 
 #endif   // _LIFE_POINT_H_

@@ -7,5 +7,14 @@
 #define TRUE !FALSE
 #endif
 
-int debug = FALSE;
-int verbose = FALSE;
+#ifndef DEFAULT_MAX_GENERATION
+#define DEFAULT_MAX_GENERATION 1000
+#endif
+
+/* #ifndef DEBUG_VERBOSE_VARS */
+/* #define DEBUG_VERBOSE_VARS */
+/* int debug = FALSE; */
+/* int verbose = FALSE; */
+/* #endif */
+
+

@@ -5,7 +5,7 @@
 
 
 //--------------------------------------------------------------------------------
-life_point *init_life_point(int life_value) {
+life_point *create_life_point(int life_value) {
   life_point *result = malloc(sizeof(life_point));
   if (result) {
     result->now = (life_value == 0) ? 0 : 1;
@@ -49,4 +49,10 @@ void next_generation(life_point *this) {
 //--------------------------------------------------------------------------------
 int is_living(life_point *this) {
   return this->now;
+}
+
+
+//--------------------------------------------------------------------------------
+void set_life_value(life_point *this, int life_value) {
+  this->now = (life_value == 0) ? 0 : 1;
 }

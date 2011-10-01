@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "std_const.h"
+#include "biotope.h"
 
 int debug = FALSE;
 int verbose = FALSE;
@@ -79,6 +80,34 @@ int main(int argc, char **argv) {
   	printf("\tBiotope: %ix%i\n",x,y);
   	printf("\tGenerations: %i\n",generations);
 	}
+
+
+  // FIXXXXME - gefupi 20111001 - implemented two boards of different 
+  //                              size with F-pentomino on them for testing 
+  //                              and debuging purposes
+  // small board
+  /* biotope *board = init_biotope(147,147); */
+  /* set_life_point_value(board, 73, 72, 1); */
+  /* set_life_point_value(board, 74, 72, 1); */
+  /* set_life_point_value(board, 72, 73, 1); */
+  /* set_life_point_value(board, 73, 73, 1); */
+  /* set_life_point_value(board, 73, 74, 1); */
+
+  // big board
+  biotope *board = init_biotope(1147,1147);
+  set_life_point_value(board, 573, 572, 1);
+  set_life_point_value(board, 574, 572, 1);
+  set_life_point_value(board, 572, 573, 1);
+  set_life_point_value(board, 573, 573, 1);
+  set_life_point_value(board, 573, 574, 1);
+
+  // after set up board
+  switch_on_debug_mode(board);
+  set_max_generation(board, generations);
+  start_living(board);
+  destroy_biotope(&board);
+
+  // end fixxxxme - gefupi 20111001
 
   return (EXIT_SUCCESS);
 }

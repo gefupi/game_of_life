@@ -12,6 +12,8 @@ typedef struct _biotope_{
   unsigned int max_generation;
   unsigned int population_maximum;
   unsigned int generation_of_population_maximum;
+  int debug_mode;
+  int boarder_collision;
 } biotope;
 
 /* Constuctor for the "biotop onject"
@@ -29,8 +31,10 @@ void destroy_biotope(biotope **this);
 
 void set_max_generation(biotope *this, int max_generations);
 
+void switch_on_debug_mode(biotope *this);
+
 void set_life_point_value(biotope *this, int x, int y, int life_value);
 
-void start_living();
+void start_living(biotope *this);
 
 #endif

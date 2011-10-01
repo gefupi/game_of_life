@@ -8,7 +8,8 @@
 #endif
 
 #ifndef DEFAULT_MAX_GENERATION
-#define DEFAULT_MAX_GENERATION 1000
+//                             10.000.000
+#define DEFAULT_MAX_GENERATION 10000000
 #endif
 
 /* #ifndef DEBUG_VERBOSE_VARS */

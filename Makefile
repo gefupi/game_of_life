@@ -7,7 +7,7 @@ CFLAGS=-Wall -o $(OUT)
 $(OUT):$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS)
 
-game_of_life.o: game_of_life.c std_const.h
+game_of_life.o: game_of_life.c std_const.h biotope.h
 	$(CC) -c game_of_life.c
 
 biotope.o: biotope.c biotope.h\

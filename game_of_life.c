@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
   set_life_point_value(board, 573, 574, 1);
 
   // after set up board
-  switch_on_debug_mode(board);
+  switch_on_verbose_mode(board);
   set_max_generation(board, generations);
   start_living(board);
   destroy_biotope(&board);

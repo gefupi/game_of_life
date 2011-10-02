@@ -11,7 +11,7 @@ void switch_to_next_gereation(biotope *this);
 void update_population(biotope *this);
 void print_result(biotope *this);
 void print_debug_info(biotope *this);
-
+void print_verbose_info(biotope *this);
 
 
 //--------------------------------------------------------------------------------
@@ -33,6 +33,7 @@ biotope* init_biotope(int max_x,int max_y){
     this->population_maximum = 0;
     this->generation_of_population_maximum = 0;
     this->debug_mode = FALSE;
+    this->verbose_mode = FALSE;
     this->boarder_collision = 0;
     // init field
     if (init_field(this) == EXIT_FAILURE) {
@@ -69,14 +70,20 @@ void destroy_biotope(biotope **this) {
 
 
 //--------------------------------------------------------------------------------
-void set_max_generation(biotope *this, int max_generations) {
-  this->max_generation = max_generations;
+void set_max_generation(biotope *this, int max_generation) {
+  this->max_generation = max_generation;
 }
 
 
 //--------------------------------------------------------------------------------
 void switch_on_debug_mode(biotope *this) {
   this->debug_mode = TRUE;
+}
+
+
+//--------------------------------------------------------------------------------
+void switch_on_verbose_mode(biotope *this) {
+  this->verbose_mode = TRUE;
 }
 
 
@@ -98,13 +105,11 @@ void start_living(biotope *this) {
   do {
     calculate_next_generation_step(this);
     switch_to_next_gereation(this);
-    this->generation++;
-    update_population(this);
     if ((this->generation) < 5 && (this->debug_mode))
       print_debug_info(this);
-    if (this->generation % 99 /* 999999 */ == 0) {
-      if (this->debug_mode) {
-	print_debug_info(this);
+    if (this->generation % 100 /* 1000000 */ == 0) {
+      if (this->verbose_mode) {
+	print_verbose_info(this);
       } else {
 	fprintf(stdout, ".");
 	fflush(stdout);
@@ -123,6 +128,14 @@ void start_living(biotope *this) {
  */
 
 
+/*
+ * This function is used to initialise the field and all the life points in this 
+ * field.
+ * @input: this - pointer to the biotope object which field should be initialized
+ * @return: EXIT_SUCCESS - if no error occured during field initialization
+ *          EXIT_FAILURE - an error occured, field is not initialized correctly
+ *                         (e.g. out of memory, ...)
+ */
 //--------------------------------------------------------------------------------
 int init_field(biotope *this) {
   int out_of_mem_error = FALSE;
@@ -149,6 +162,14 @@ int init_field(biotope *this) {
 }
 
 
+/*
+ * This function calculates how many living neigbours the life point at 
+ * position (x,y) has.
+ * @input: this - pointer to the biotope object which is used
+ *         x - x-coordinate of the position of the life point
+ *         y - x-coordinate of the position of the life point
+ * @return: number of living neighbours, which will be in interval [0,8]
+ */
 //--------------------------------------------------------------------------------
 int get_living_neighbours_count(biotope *this, int x, int y) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
@@ -198,9 +219,15 @@ int get_living_neighbours_count(biotope *this, int x, int y) {
 }
 
 
+/*
+ * This function calls the function to calculate life value of next generation for 
+ * each life point in field.
+ * @input: this - pointer to the biotope object which is used 
+ */
 //--------------------------------------------------------------------------------
 void calculate_next_generation_step(biotope *this) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
+  // ENHANCEMENT TODO: use threads to speed up this calculations
   int x = 0;
   int y = 0;
   for (x = 0; x < this->max_x; x++) {
@@ -213,6 +240,13 @@ void calculate_next_generation_step(biotope *this) {
   }
 }
 
+
+/*
+ * This function calls the function to switch a life point to the next generation 
+ * for each life point in field. Afterwards generation counter is increased and 
+ * update_population is called.
+ * @input: this - pointer to the biotope object which is used 
+ */
 //--------------------------------------------------------------------------------
 void switch_to_next_gereation(biotope *this) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
@@ -229,9 +263,16 @@ void switch_to_next_gereation(biotope *this) {
       }
     }
   }
+  this->generation++;
+  update_population(this);
 }
 
 
+/*
+ * This function updates the local members population and its maximum. It is 
+ * called at the end of each step to next generation.
+ * @input: this - pointer to the biotope object which will be affected
+ */
 //--------------------------------------------------------------------------------
 void update_population(biotope *this) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
@@ -250,36 +291,56 @@ void update_population(biotope *this) {
 }
 
 
+/*
+ * This function prints the result of the biotope calculation, e.g. population, 
+ * population maximum, generation of population maximum, ...
+ * @input: this - pointer to the biotope object which is used  
+ */
 //--------------------------------------------------------------------------------
 void print_result(biotope *this) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
   if (this->boarder_collision)
     fprintf(stdout, "[WARNING]: boarder collision detected!\n           Calculated result may be incorrect!\n");
   if (this->population) {
-    fprintf(stdout, "reached generation %8d\n", this->generation);
-    fprintf(stdout, "actual population: %8d\n", this->population);
+    fprintf(stdout, "reached generation %5d\n", this->generation);
+    fprintf(stdout, "actual population: %5d\n", this->population);
   } else {
-    fprintf(stdout, "extinction!\nlast life has been in generation: %8d\n", this->generation-1);
+    fprintf(stdout, "extinction!\nlast life has been in generation: %5d\n", this->generation-1);
   }
   fprintf(stdout, "maximum population has been: %8d\n", this->population_maximum);
-  fprintf(stdout, "the population maximum has been reached in generation %8d for the firs time\n", 
+  fprintf(stdout, "the population maximum has been reached in generation %5d for the firs time\n", 
 	  this->generation_of_population_maximum);
 }
 
 
+/*
+ * This function prints out the board, wich only is useful for small boards
+ * @input: this - pointer to the biotope object which is used 
+ */
 //--------------------------------------------------------------------------------
 void print_debug_info(biotope *this) {
   // ASSERT: biotope (this) was initialized correctly and is not NULL
   int x = 0;
   int y = 0;
+  fprintf(stdout, "[DEBUG]: generation: %d\n", this->generation);
+  for (y = 0; y < this->max_y; y++) {
+    for (x = 0; x < this->max_x; x++) {
+      fprintf(stdout, "%d", is_living(this->field[x][y]));
+    }
+    fprintf(stdout, "\n");
+  }
+  fprintf(stdout, "\n\n");
+}
+
+
+/* 
+ * This function prints out some information like actual generation, population
+ * maximum, ...
+ * @input: this - pointer to the biotope object which is used 
+ */
+//--------------------------------------------------------------------------------
+void print_verbose_info(biotope *this) {
   fprintf(stdout, "generation: %d\n", this->generation);
-  // this will print out the board, only useful for small boards
-  /* for (y = 0; y < this->max_y; y++) { */
-  /*   for (x = 0; x < this->max_x; x++) { */
-  /*     fprintf(stdout, "%d", is_living(this->field[x][y])); */
-  /*   } */
-  /*   fprintf(stdout, "\n"); */
-  /* } */
-  fprintf(stdout, "answer %d,%d", this->generation_of_population_maximum, this->population_maximum);
+  fprintf(stdout, "population maximum (generation of max, max): %d,%d", this->generation_of_population_maximum, this->population_maximum);
   fprintf(stdout, "\n\n");
 }

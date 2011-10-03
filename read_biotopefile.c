@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "biotope.h"
+#include "fast_biotope.h"
 #include "std_const.h"
 
 
@@ -54,20 +54,20 @@ int eval_y_size(char* filename){
  * @return:
  *		pointer to biotope
 */
-biotope* read_biotopefile(char* filename){
-	if(debug) printf("Parsing %s\n", filename);
+fast_biotope* read_biotopefile(char* filename){
+	if(debug) fprintf(stderr,"Parsing %s\n", filename);
 
 	FILE* fh = fopen(filename, "r");
 	if(fh==NULL){
-		printf("File read error\n");
+		fprintf(stderr,"File read error\n");
 		exit(EXIT_FAILURE);
 	}
 
 	int bt_x = eval_x_size(filename);
 	int bt_y = eval_y_size(filename);
-	if(debug) printf("Eval of File (x/y):(%i/%i)\n",bt_x,bt_y);
+	if(debug) fprintf(stderr,"Eval of File (x/y):(%i/%i)\n",bt_x,bt_y);
 
-	biotope* my_biotope = init_biotope(bt_x,bt_y);
+	fast_biotope* my_biotope = fb_create_biotope(bt_x,bt_y);
 
 	int x = 0;
 	int y = 0;
@@ -79,8 +79,8 @@ biotope* read_biotopefile(char* filename){
 			continue;
 		}
 		if ('1'==c){
-			if(debug) printf("Found live at Pos.:(%i/%i)\n",x,y);
-			set_life_point_value(my_biotope,x,y,LIVE);
+			if(debug) fprintf(stderr,"Found live at Pos.:(%i/%i)\n",x,y);
+			fb_set_life_point_value(my_biotope,x,y,LIVE);
 		}
 		x++;		
 	}

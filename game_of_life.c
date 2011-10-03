@@ -94,14 +94,17 @@ int main(int argc, char **argv) {
   /* start_living(board); */
   /* destroy_biotope(&board); */
 
-
+  /*
   fast_biotope *fast_board = fb_create_biotope(303,303);
   fb_set_life_point_value(fast_board, 151, 150, LIFE);
   fb_set_life_point_value(fast_board, 152, 150, LIFE);
   fb_set_life_point_value(fast_board, 150, 151, LIFE);
   fb_set_life_point_value(fast_board, 151, 151, LIFE);
   fb_set_life_point_value(fast_board, 151, 152, LIFE);
-  
+  */
+
+  fast_biotope *fast_board =  read_biotopefile(filename);
+
   fb_set_max_generation(fast_board, generations);
   fb_set_framerate(fast_board, 1);
   fb_start_living(fast_board);

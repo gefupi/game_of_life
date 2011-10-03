@@ -4,8 +4,8 @@ from pygame.locals import *
 
 pygame.init()
 
-width=800
-height=600
+width=1024
+height=768
 
 
 screen = pygame.display.set_mode((width,height))

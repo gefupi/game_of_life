@@ -4,6 +4,7 @@
 
 #include "std_const.h"
 #include "biotope.h"
+#include "fast_biotope.h"
 
 int debug = FALSE;
 int verbose = FALSE;

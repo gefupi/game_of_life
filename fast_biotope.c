@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 //--------------------------------------------------------------------------------
 fast_biotope* fb_create_biotope(int max_x, int max_y) {
@@ -10,7 +12,7 @@ fast_biotope* fb_create_biotope(int max_x, int max_y) {
     fprintf(stdout, "cannot create biotope of size %d X %d (x X y)", max_x, max_y);
     return NULL;  
   }
-  biotope* result = (fast_biotope*)malloc(sizeof(fast_biotope));
+  fast_biotope* result = (fast_biotope*)malloc(sizeof(fast_biotope));
   if (!result)
     return NULL;
   result->field = NULL;
@@ -83,10 +85,10 @@ void fb_start_living(fast_biotope *this) {
 int init_fields(fast_biotope *this) {
     this->field = malloc(this->max_x * this->max_y *sizeof(int));
     this->next_field = malloc(this->max_x * this->max_y *sizeof(int));
-    if (!(this-field) || !(this->next_field)) {
+    if (!(this->field) || !(this->next_field)) {
       return (EXIT_FAILURE);
     }
-    memset(this->field, 0, this->max_x * this->max_y *sizeof(int));
+    memset(this->field, 0, (this->max_x * this->max_y *sizeof(int)));
     memset(this->next_field, 0, this->max_x * this->max_y *sizeof(int));
     return (EXIT_SUCCESS);
 }

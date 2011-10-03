@@ -17,6 +17,7 @@ typedef struct _fast_biotope_{
   int debug_mode;
   int verbose_mode;
   int boarder_collision;
+  int framerate;
 } fast_biotope;
 
 
@@ -56,6 +57,8 @@ void fb_set_max_generation(fast_biotope *this, int max_generation);
  */
 void fb_switch_on_debug_mode(fast_biotope *this);
 
+
+void fb_set_framerate(fast_biotope *this, int framerate);
 
 /*
  * This function switches on the verbose mode of the biotope object which will result

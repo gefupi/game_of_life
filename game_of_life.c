@@ -4,6 +4,7 @@
 
 #include "std_const.h"
 #include "biotope.h"
+#include "fast_biotope.h"
 
 int debug = FALSE;
 int verbose = FALSE;
@@ -82,17 +83,31 @@ int main(int argc, char **argv) {
 	}
 
 
-  biotope *board = NULL;
-  board = read_biotopefile(filename);
+  /* biotope *board = NULL; */
+  /* board = read_biotopefile(filename); */
 
-  // after set up board
-  if (verbose) switch_on_verbose_mode(board);
-  if (debug) switch_on_debug_mode(board);
+  /* // after set up board */
+  /* if (verbose) switch_on_verbose_mode(board); */
+  /* if (debug) switch_on_debug_mode(board); */
 
-  set_max_generation(board, generations);
-  start_living(board);
-  destroy_biotope(&board);
+  /* set_max_generation(board, generations); */
+  /* start_living(board); */
+  /* destroy_biotope(&board); */
 
+
+  fast_biotope *fast_board = fb_create_biotope(1003,1003);
+  fb_set_life_point_value(fast_board, 501, 500, LIFE);
+  fb_set_life_point_value(fast_board, 502, 500, LIFE);
+  fb_set_life_point_value(fast_board, 500, 501, LIFE);
+  fb_set_life_point_value(fast_board, 501, 501, LIFE);
+  fb_set_life_point_value(fast_board, 501, 502, LIFE);
+  
+  fb_set_max_generation(fast_board, generations);
+  fb_set_framerate(fast_board, 1);
+  fb_start_living(fast_board);
+  fb_destroy_biotope(&fast_board);
+
+  
 
   return (EXIT_SUCCESS);
 }

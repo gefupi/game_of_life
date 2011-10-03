@@ -7,6 +7,11 @@
 #define TRUE !FALSE
 #endif
 
+#ifndef LIFE_STATUS
+#define LIFE 1
+#define DEAD 0
+#define INVALID -1
+#endif
 
 #ifndef LIFE_CHAR
 #define LIFE_CHAR 1

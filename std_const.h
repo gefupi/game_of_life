@@ -7,5 +7,12 @@
 #define TRUE !FALSE
 #endif
 
-int debug = FALSE;
-int verbose = FALSE;
+
+#ifndef LIFE_CHAR
+#define LIFE_CHAR 1
+#endif
+
+#ifndef DEAD_CHAR
+#define DEAD_CHAR !LIFE_CHAR
+#endif
+

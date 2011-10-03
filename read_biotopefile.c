@@ -3,6 +3,7 @@
 #include "read_biotopefile.h"
 #include "std_const.h"
 
+
 extern int debug;
 extern int verbose;
 
@@ -51,6 +52,13 @@ biotope* read_biotopefile(int max_x,int max_y,char* filename){
 	else
 		x = eval_x_size(filename);
 	char* str	= (char*)malloc(x);	
+
+	
+	biotop* my_biotope = init_biotope(x,max_y);
+	while(TRUE){
+		fgets(str,x,fh);
+
+	}
 
 	fclose(fh);
 }

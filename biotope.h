@@ -2,12 +2,16 @@
 #define _BIOTOPE_H_
 
 #include "life_point.h"
+#include "std_const.h"
 
 typedef struct _biotope_{
 	int max_x;
 	int max_y;
 	struct _life_point_ **field;
 } biotope;
+
+
+
 
 /* Constuctor for the "biotop onject"
  * @input:

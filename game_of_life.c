@@ -4,6 +4,10 @@
 
 #include "std_const.h"
 
+int debug = FALSE;
+int verbose = FALSE;
+
+
 int main(int argc, char **argv) {
 
 	int x = 0;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "read_biotopefile.h"
+#include "biotope.h"
 #include "std_const.h"
 
 
@@ -19,6 +19,23 @@ int eval_x_size(char* filename){
 		x++;
 	}
 	close(fh);
+	return x;
+}
+
+
+int eval_y_size(char* filename){
+	FILE* fh = fopen(filename, "r");	
+	char c;
+	int y=1;
+	while(TRUE){
+		c=fgetc(fh);
+		if ((c==EOF))
+			break;	
+		if (c=='\n')
+			y++;		
+	}
+	close(fh);
+	return y;
 }
 
 
@@ -51,13 +68,24 @@ biotope* read_biotopefile(int max_x,int max_y,char* filename){
 		x = max_x;
 	else
 		x = eval_x_size(filename);
-	char* str	= (char*)malloc(x);	
 
-	
-	biotop* my_biotope = init_biotope(x,max_y);
+	int y;
+	if (max_y>0)
+		y = max_y;
+	else
+		y = eval_y_size(filename);
+
+	biotope* my_biotope = init_biotope(x,y);
+	char* str	= (char*)malloc(x);
+	int x_count = 0;
+	int y_count = 0;
 	while(TRUE){
-		fgets(str,x,fh);
-
+		if (fgets(str,x,fh)==NULL)
+			break;
+		x_count = 0;
+		while(x_count<x){
+			
+		}
 	}
 
 	fclose(fh);

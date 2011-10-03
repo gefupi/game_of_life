@@ -1,6 +1,6 @@
 OUT=gameOfLife
 CC=gcc
-OBJS=game_of_life.o biotope.o life_point.o
+OBJS=game_of_life.o biotope.o life_point.o read_biotopefile.o
 CFLAGS=-Wall -o $(OUT)
 
 
@@ -16,6 +16,9 @@ biotope.o: biotope.c biotope.h\
 
 life_point.o: life_point.c life_point.h
 	$(CC) -c life_point.c
+
+read_biotopefile.o: read_biotopefile.c read_biotopefile.h
+	$(CC) -c read_biotopefile.c
 
 # Some usefull stuff
 clean:

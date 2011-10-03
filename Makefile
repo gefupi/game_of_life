@@ -1,7 +1,7 @@
 OUT=gameOfLife
 CC=gcc
 OBJS=game_of_life.o biotope.o life_point.o read_biotopefile.o
-CFLAGS=-Wall -o $(OUT)
+CFLAGS=-Wall -Wextra -o $(OUT)
 
 
 $(OUT):$(OBJS)

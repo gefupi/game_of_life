@@ -4,6 +4,6 @@
 #include "biotope.h"
 
 
-biotope* read_biotopefile(int max_x,int max_y,char* filename);
+biotope* read_biotopefile(char* filename);
 
 #endif // _READ_BIOTOPEFILE_

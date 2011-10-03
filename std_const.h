@@ -21,6 +21,14 @@
 #define DEFAULT_MAX_GENERATION 10000000
 #endif
 
+#ifndef LIVE
+#define LIVE 1
+#endif
+
+#ifndef DEAD
+#define DEAD 0
+#endif
+
 /* #ifndef DEBUG_VERBOSE_VARS */
 /* #define DEBUG_VERBOSE_VARS */
 /* int debug = FALSE; */

@@ -26,7 +26,7 @@ int eval_x_size(char* filename){
 int eval_y_size(char* filename){
 	FILE* fh = fopen(filename, "r");	
 	char c;
-	int y=1;
+	int y=0;
 	while(TRUE){
 		c=fgetc(fh);
 		if ((c==EOF))
@@ -54,7 +54,7 @@ int eval_y_size(char* filename){
  * @return:
  *		pointer to biotope
 */
-biotope* read_biotopefile(int max_x,int max_y,char* filename){
+biotope* read_biotopefile(char* filename){
 	if(debug) printf("Parsing %s\n", filename);
 
 	FILE* fh = fopen(filename, "r");
@@ -63,32 +63,29 @@ biotope* read_biotopefile(int max_x,int max_y,char* filename){
 		exit(EXIT_FAILURE);
 	}
 
-	int x;
-	if (max_x>0)
-		x = max_x;
-	else
-		x = eval_x_size(filename);
+	int bt_x = eval_x_size(filename);
+	int bt_y = eval_y_size(filename);
+	if(debug) printf("Eval of File (x/y):(%i/%i)\n",bt_x,bt_y);
 
-	int y;
-	if (max_y>0)
-		y = max_y;
-	else
-		y = eval_y_size(filename);
+	biotope* my_biotope = init_biotope(bt_x,bt_y);
 
-	biotope* my_biotope = init_biotope(x,y);
-	char* str	= (char*)malloc(x);
-	int x_count = 0;
-	int y_count = 0;
-	while(TRUE){
-		if (fgets(str,x,fh)==NULL)
-			break;
-		x_count = 0;
-		while(x_count<x){
-			
+	int x = 0;
+	int y = 0;
+	char c;
+	while((c=fgetc(fh))!=EOF){
+		if(c=='\n'){
+			y++;
+			x=0;
+			continue;
 		}
+		if ('1'==c){
+			if(debug) printf("Found live at Pos.:(%i/%i)\n",x,y);
+			set_life_point_value(my_biotope,x,y,LIVE);
+		}
+		x++;		
 	}
-
 	fclose(fh);
+	return my_biotope;
 }
 
 

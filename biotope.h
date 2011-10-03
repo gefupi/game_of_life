@@ -70,7 +70,7 @@ void switch_on_verbose_mode(biotope *this);
  * @input: this - pointer to the biotope object which is used
  *         x - x-coordinate of the position of the affected life point
  *         y - x-coordinate of the position of the affected life point
- *         
+ *         life_value - 1 == live  /  0 == dead        
  */
 void set_life_point_value(biotope *this, int x, int y, int life_value);
 

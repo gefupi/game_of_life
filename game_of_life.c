@@ -8,10 +8,6 @@
 int debug = FALSE;
 int verbose = FALSE;
 
-int debug = FALSE;
-int verbose = FALSE;
-
-
 int main(int argc, char **argv) {
 
 	int x = 0;
@@ -21,7 +17,7 @@ int main(int argc, char **argv) {
   // Parse Opts
   int c;
   // TODO fix output for non existing options and not given argument vor options like -b without file
-  while ((c = getopt(argc, argv, ":vdx:y:hb:g:")) != -1) {
+  while ((c = getopt(argc, argv, "/*:*/vdx:y:hb:g:")) != -1) {
   	switch (c){
 	  	case 'h':
 	  		printf("-h            : print this help\n");
@@ -65,7 +61,8 @@ int main(int argc, char **argv) {
 	  		if (filename==NULL) {
 	  			printf("Whats the filename???\n");
 	  			exit(EXIT_FAILURE);
-	  		}
+	  		} else 
+	  			fprintf(stdout, "filename: %s\n", filename);
 	  		break;
   	}
   }
@@ -98,15 +95,22 @@ int main(int argc, char **argv) {
   /* set_life_point_value(board, 73, 74, 1); */
 
   // big board
-  biotope *board = init_biotope(1147,1147);
-  set_life_point_value(board, 573, 572, 1);
-  set_life_point_value(board, 574, 572, 1);
-  set_life_point_value(board, 572, 573, 1);
-  set_life_point_value(board, 573, 573, 1);
-  set_life_point_value(board, 573, 574, 1);
+  //biotope *board = init_biotope(1147,1147);
+  //set_life_point_value(board, 573, 572, 1);
+  //set_life_point_value(board, 574, 572, 1);
+  //set_life_point_value(board, 572, 573, 1);
+  //set_life_point_value(board, 573, 573, 1);
+  //set_life_point_value(board, 573, 574, 1);
+
+  biotope *board = NULL;
+  board = read_biotopefile(filename);
+
+
 
   // after set up board
   switch_on_verbose_mode(board);
+    switch_on_debug_mode(board);
+
   set_max_generation(board, generations);
   start_living(board);
   destroy_biotope(&board);

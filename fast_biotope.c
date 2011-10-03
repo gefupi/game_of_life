@@ -201,8 +201,10 @@ void fb_switch_to_next_gereation(fast_biotope *this) {
 void fb_update_population(fast_biotope *this) {
   int index = 0;
   int population = 0;
-  for (index = 0; index < (this->max_x*this->max_y); index++)
-    population++;
+  for (index = 0; index < (this->max_x*this->max_y); index++) {
+    if (this->field[index] == LIFE)
+      population++;
+  }
   this->population = population;
   if (this->population > this->population_maximum) {
     this->population_maximum = this->population;
@@ -221,7 +223,7 @@ void fb_print_result(fast_biotope *this) {
   } else {
     fprintf(stderr, "extinction!\nlast life has been in generation: %5d\n", this->generation-1);
   }
-  fprintf(stderr, "maximum population has been: %8d\n", this->population_maximum);
+  fprintf(stderr, "maximum population has been: %5d\n", this->population_maximum);
   fprintf(stderr, "the population maximum has been reached in generation %5d for the firs time\n", 
 	  this->generation_of_population_maximum);
 }

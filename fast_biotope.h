@@ -1,5 +1,5 @@
-#ifndef _BIOTOPE_H_
-#define _BIOTOPE_H_
+#ifndef _FAST_BIOTOPE_H_
+#define _FAST_BIOTOPE_H_
 
 #include "life_point.h"
 #include "std_const.h"

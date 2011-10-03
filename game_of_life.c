@@ -103,9 +103,21 @@ int main(int argc, char **argv) {
   fb_set_life_point_value(fast_board, 151, 152, LIFE);
   
   fb_set_max_generation(fast_board, generations);
-  fb_set_framerate(fast_board, 1);
+  //  fb_set_framerate(fast_board, 1);
   fb_start_living(fast_board);
   fb_destroy_biotope(&fast_board);
+
+
+  /* biotope *board = init_biotope(303,303); */
+  /* set_life_point_value(board, 151, 150, LIFE); */
+  /* set_life_point_value(board, 152, 150, LIFE); */
+  /* set_life_point_value(board, 150, 151, LIFE); */
+  /* set_life_point_value(board, 151, 151, LIFE); */
+  /* set_life_point_value(board, 151, 152, LIFE); */
+  
+  /* set_max_generation(board, generations); */
+  /* start_living(board); */
+  /* destroy_biotope(&board); */
 
   
 

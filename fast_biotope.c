@@ -21,7 +21,7 @@ void fb_print_biotope(fast_biotope *this);
 //--------------------------------------------------------------------------------
 fast_biotope* fb_create_biotope(int max_x, int max_y) {
   if ((max_x <= 0) || (max_y <= 0)) {
-    fprintf(stdout, "cannot create biotope of size %d X %d (x X y)", max_x, max_y);
+    fprintf(stderr, "cannot create biotope of size %d X %d (x X y)", max_x, max_y);
     return NULL;  
   }
   fast_biotope* result = (fast_biotope*)malloc(sizeof(fast_biotope));
@@ -94,7 +94,7 @@ void fb_set_life_point_value(fast_biotope *this, int x, int y, int life_value) {
 
 //--------------------------------------------------------------------------------
 void fb_start_living(fast_biotope *this) {
-  fprintf(stdout, "start living until generation %d is reached:\n", this->max_generation);
+  fprintf(stderr, "start living until generation %d is reached:\n", this->max_generation);
   do {
     fb_calculate_next_generation_step(this);
     fb_switch_to_next_gereation(this);
@@ -214,15 +214,15 @@ void fb_update_population(fast_biotope *this) {
 //--------------------------------------------------------------------------------
 void fb_print_result(fast_biotope *this) {
   if (this->boarder_collision)
-    fprintf(stdout, "[WARNING]: boarder collision detected!\n           Calculated result may be incorrect!\n");
+    fprintf(stderr, "[WARNING]: boarder collision detected!\n           Calculated result may be incorrect!\n");
   if (this->population) {
-    fprintf(stdout, "reached generation %5d\n", this->generation);
-    fprintf(stdout, "actual population: %5d\n", this->population);
+    fprintf(stderr, "reached generation %5d\n", this->generation);
+    fprintf(stderr, "actual population: %5d\n", this->population);
   } else {
-    fprintf(stdout, "extinction!\nlast life has been in generation: %5d\n", this->generation-1);
+    fprintf(stderr, "extinction!\nlast life has been in generation: %5d\n", this->generation-1);
   }
-  fprintf(stdout, "maximum population has been: %8d\n", this->population_maximum);
-  fprintf(stdout, "the population maximum has been reached in generation %5d for the firs time\n", 
+  fprintf(stderr, "maximum population has been: %8d\n", this->population_maximum);
+  fprintf(stderr, "the population maximum has been reached in generation %5d for the firs time\n", 
 	  this->generation_of_population_maximum);
 }
 

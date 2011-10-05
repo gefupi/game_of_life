@@ -8,14 +8,17 @@
 
 int fb_init_fields(fast_biotope *this);
 int fb_get_living_neighbours_count(fast_biotope *this, int x, int y);
-void fb_calculate_next_generation_step(fast_biotope *this);
+char fb_calculate_next_generation_step(fast_biotope *this);
 void fb_calculate_next_generation(fast_biotope *this, int index, int living_neighbours);
 void fb_switch_to_next_gereation(fast_biotope *this);
+void fb_switch_to_next_gereation_and_resize_field(fast_biotope *this, char resize_info);
+int resize_field(fast_biotope *this, char directions);
 void fb_update_population(fast_biotope *this);
 void fb_print_result(fast_biotope *this);
 void fb_print_debug_info(fast_biotope *this);
 void fb_print_verbose_info(fast_biotope *this);
 void fb_print_biotope(fast_biotope *this);
+
 
 
 //--------------------------------------------------------------------------------
@@ -62,21 +65,26 @@ void fb_destroy_biotope(fast_biotope **this) {
   }
 }
 
+
 //--------------------------------------------------------------------------------
 void fb_set_max_generation(fast_biotope *this, int max_generation) {
     this->max_generation = max_generation;
 }
+
 
 //--------------------------------------------------------------------------------
 void fb_switch_on_debug_mode(fast_biotope *this) {
   this->debug_mode = TRUE;
 }
 
+
 //--------------------------------------------------------------------------------
 void fb_switch_on_verbose_mode(fast_biotope *this) {
   this->verbose_mode = TRUE;
 }
 
+
+//--------------------------------------------------------------------------------
 void fb_set_framerate(fast_biotope *this, int framerate) {
   this->framerate = framerate;
 }
@@ -92,12 +100,21 @@ void fb_set_life_point_value(fast_biotope *this, int x, int y, int life_value) {
   this->field[index] = life_value;
 }
 
+
 //--------------------------------------------------------------------------------
 void fb_start_living(fast_biotope *this) {
+  char resize_info = 0;
   fprintf(stderr, "start living until generation %d is reached:\n", this->max_generation);
   do {
-    fb_calculate_next_generation_step(this);
-    fb_switch_to_next_gereation(this);
+    resize_info = 0;
+    resize_info = fb_calculate_next_generation_step(this);
+    if (resize_info == NO_RESIZE)
+      fb_switch_to_next_gereation(this);
+    else {
+      fb_switch_to_next_gereation_and_resize_field(this, resize_info);
+      /* fprintf(stderr, "field must be resized (%d)\n", resize_info); */
+      /* fb_switch_to_next_gereation(this); */
+    }    
     if ((this->generation) < 5 && (this->debug_mode))
       /* fb_print_debug_info(this); */
     if (this->generation % 100 /* 1000000 */ == 0) {
@@ -163,14 +180,28 @@ int fb_get_living_neighbours_count(fast_biotope *this, int x, int y) {
 
 
 //--------------------------------------------------------------------------------
-void fb_calculate_next_generation_step(fast_biotope *this) {
+char fb_calculate_next_generation_step(fast_biotope *this) {
+  // ENHANCEMENT TODO: rewrite boarder collision chack and use threads here
+  char result = NO_RESIZE;
   int x = 0;
   int y = 0;
   for (x = 0; x < this->max_x; x++) {
     for (y = 0; y < this->max_y; y++) {
       fb_calculate_next_generation(this, ((this->max_x * y) + x), fb_get_living_neighbours_count(this, x, y));
+      // check for boarder collision
+      if ((x == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
+	result |= LEFT;
+      if ((x+1 == this->max_x) && (this->next_field[(this->max_x*y) + x] == LIFE))
+	result |= RIGHT;
+      if ((y == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
+	result |= UP;
+      if ((y+1 == this->max_y) && (this->next_field[(this->max_x*y) + x] == LIFE))
+	result |= DOWN;
     }
   }
+  if ((result & UP) || (result & RIGHT) || (result & DOWN) || (result & LEFT))
+    result &= ~NO_RESIZE;
+  return result;
 }
 
 
@@ -187,13 +218,71 @@ void fb_calculate_next_generation(fast_biotope *this, int index, int living_neig
 
 //--------------------------------------------------------------------------------
 void fb_switch_to_next_gereation(fast_biotope *this) {
-  // TODO: add boarder collision detection
   int *old_field = this->field;
   this->field = this->next_field;
   this->next_field = old_field;
   memset(this->next_field, INVALID, this->max_x * this->max_y *sizeof(int));
   this->generation++;
   fb_update_population(this);
+}
+
+
+//--------------------------------------------------------------------------------
+void fb_switch_to_next_gereation_and_resize_field(fast_biotope *this, char resize_info) {
+  int new_max_x = this->max_x;
+  int new_max_y = this->max_y;
+  int delta_x = 0;
+  int delta_y = 0;
+  if (resize_info & UP) {
+    new_max_y += DEF_RESIZE_ADDITION;
+    delta_y = DEF_RESIZE_ADDITION;
+  }
+  if (resize_info & DOWN)
+    new_max_y += DEF_RESIZE_ADDITION;
+  if (resize_info & LEFT) {
+    new_max_x += DEF_RESIZE_ADDITION;
+    delta_x = DEF_RESIZE_ADDITION;
+  }
+  if (resize_info & RIGHT)
+    new_max_x += DEF_RESIZE_ADDITION;
+  if (this->verbose_mode)
+    fprintf(stderr, "resizing field %ix%i to %ix%i after generation %i\n", this->max_x, this->max_y, new_max_x, new_max_y, this->generation);
+  // resize field
+  free(this->field);
+  this->field = malloc(new_max_x * new_max_y * sizeof(int));
+  if (!this->field) {
+    fprintf(stderr, "[ERROR]: Out of memory\n");
+    fprintf(stderr, "[FATAL]: Cannot allocate memory for field. Exiting.\n\n");
+    exit (EXIT_FAILURE);
+  }
+  memset(this->field, DEAD, (new_max_x * new_max_y * sizeof(int)));
+  // copy next generation into field 
+  int y = 0;
+  for (y = 0; y < this->max_y; y++) {
+    memcpy(&(this->field[((y+delta_y)*new_max_x) + delta_x]), &(this->next_field[y*this->max_x]), this->max_x*sizeof(int));
+  }
+  //resize next field
+  free(this->next_field);
+  this->next_field = malloc(new_max_x * new_max_y * sizeof(int));
+  if (!this->next_field) {
+    fprintf(stderr, "[ERROR]: Out of memory\n");
+    fprintf(stderr, "[FATAL]: Cannot allocate memory for next_field. Exiting.\n\n");
+    exit (EXIT_FAILURE);
+  }
+  memset(this->next_field, INVALID, (new_max_x * new_max_y * sizeof(int)));
+  // set new x and y maxima
+  this->max_x = new_max_x;
+  this->max_y = new_max_y;
+  // last steps to reach next generation
+  this->generation++;
+  fb_update_population(this);  
+}
+
+
+//--------------------------------------------------------------------------------
+int resize_field(fast_biotope *this, char directions) {
+  // TODO: implement this function ???
+  return (EXIT_FAILURE);
 }
 
 
@@ -240,6 +329,7 @@ void fb_print_verbose_info(fast_biotope *this) {
 
 }
 
+
 //--------------------------------------------------------------------------------
 void fb_print_biotope(fast_biotope *this) {
   int x = 0;
@@ -256,3 +346,5 @@ void fb_print_biotope(fast_biotope *this) {
   }
   fprintf(stdout, "\n");
 }
+
+

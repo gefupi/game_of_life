@@ -28,5 +28,6 @@ read_biotopefile.o: read_biotopefile.c read_biotopefile.h
 clean:
 	rm -f *.o *.c~ *.h~ $(OUT)
 
-run:
-	./$(OUT)
+run: $(OUT)
+	./$(OUT) -b life.ini | python gol_display.py
+

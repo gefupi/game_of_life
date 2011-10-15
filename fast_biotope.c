@@ -20,12 +20,12 @@ void fb_print_verbose_info(fast_biotope *this);
 void fb_print_biotope(fast_biotope *this);
 
 
-typedef struct _next_gen_thread_args_ {
-  int start_x;
-  int end_x;
-  int start_y;
-  int end_y;
-} next_gen_thread_args;
+/* typedef struct _next_gen_thread_args_ { */
+/*   int start_x; */
+/*   int end_x; */
+/*   int start_y; */
+/*   int end_y; */
+/* } next_gen_thread_args; */
 
 
 //--------------------------------------------------------------------------------
@@ -189,17 +189,17 @@ int fb_get_living_neighbours_count(fast_biotope *this, int x, int y) {
 //--------------------------------------------------------------------------------
 char fb_calculate_next_generation_step(fast_biotope *this) {
   char result = NO_RESIZE;
-  int use_threads = FALSE;
-  if (MAX_THREADS > 1) {
-    next_gen_thread_args **thread_args = NULL;
-    pthrad_t **threads = NULL;
-    if (init_threads(this, &thread_args, &threads) == EXIT_SUCCESS) 
-      use_threads = TRUE;
-  }
-  if (use_threads == TRUE) {
-    // TODO implement thread handling here
-  } else {
-    if 
+  /* int use_threads = FALSE; */
+  /* if (MAX_THREADS > 1) { */
+  /*   next_gen_thread_args **thread_args = NULL; */
+  /*   pthrad_t **threads = NULL; */
+  /*   if (init_threads(this, &thread_args, &threads) == EXIT_SUCCESS)  */
+  /*     use_threads = TRUE; */
+  /* } */
+  /* if (use_threads == TRUE) { */
+  /*   // TODO implement thread handling here */
+  /* } else { */
+  /*   if  */
     int x = 0;
     int y = 0;
     for (x = 0; x < this->max_x; x++) {
@@ -207,7 +207,7 @@ char fb_calculate_next_generation_step(fast_biotope *this) {
 	fb_calculate_next_generation(this, ((this->max_x * y) + x), fb_get_living_neighbours_count(this, x, y));
       }
     }
-  }
+  /* } */
   // check for boarder collision
   for (x = 0; x < this->max_x; x++) {
     for (y = 0; y < this->max_y; y++) {

@@ -20,6 +20,13 @@ void fb_print_verbose_info(fast_biotope *this);
 void fb_print_biotope(fast_biotope *this);
 
 
+typedef struct _next_gen_thread_args_ {
+  int start_x;
+  int end_x;
+  int start_y;
+  int end_y;
+} next_gen_thread_args;
+
 
 //--------------------------------------------------------------------------------
 fast_biotope* fb_create_biotope(int max_x, int max_y) {
@@ -181,24 +188,40 @@ int fb_get_living_neighbours_count(fast_biotope *this, int x, int y) {
 
 //--------------------------------------------------------------------------------
 char fb_calculate_next_generation_step(fast_biotope *this) {
-  // ENHANCEMENT TODO: rewrite boarder collision chack and use threads here
   char result = NO_RESIZE;
-  int x = 0;
-  int y = 0;
-  for (x = 0; x < this->max_x; x++) {
-    for (y = 0; y < this->max_y; y++) {
-      fb_calculate_next_generation(this, ((this->max_x * y) + x), fb_get_living_neighbours_count(this, x, y));
-      // check for boarder collision
-      if ((x == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
-	result |= LEFT;
-      if ((x+1 == this->max_x) && (this->next_field[(this->max_x*y) + x] == LIFE))
-	result |= RIGHT;
-      if ((y == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
-	result |= UP;
-      if ((y+1 == this->max_y) && (this->next_field[(this->max_x*y) + x] == LIFE))
-	result |= DOWN;
+  int use_threads = FALSE;
+  if (MAX_THREADS > 1) {
+    next_gen_thread_args **thread_args = NULL;
+    pthrad_t **threads = NULL;
+    if (init_threads(this, &thread_args, &threads) == EXIT_SUCCESS) 
+      use_threads = TRUE;
+  }
+  if (use_threads == TRUE) {
+    // TODO implement thread handling here
+  } else {
+    if 
+    int x = 0;
+    int y = 0;
+    for (x = 0; x < this->max_x; x++) {
+      for (y = 0; y < this->max_y; y++) {
+	fb_calculate_next_generation(this, ((this->max_x * y) + x), fb_get_living_neighbours_count(this, x, y));
+      }
     }
   }
+  // check for boarder collision
+  for (x = 0; x < this->max_x; x++) {
+    for (y = 0; y < this->max_y; y++) {
+      if ((x == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
+      	result |= LEFT;
+      if ((x+1 == this->max_x) && (this->next_field[(this->max_x*y) + x] == LIFE))
+      	result |= RIGHT;
+      if ((y == 0) && (this->next_field[(this->max_x*y) + x] == LIFE))
+      	result |= UP;
+      if ((y+1 == this->max_y) && (this->next_field[(this->max_x*y) + x] == LIFE))
+      	result |= DOWN;
+    }  
+  }
+  // unset NO_RESIZE bit if boarder collision is detected
   if ((result & UP) || (result & RIGHT) || (result & DOWN) || (result & LEFT))
     result &= ~NO_RESIZE;
   return result;

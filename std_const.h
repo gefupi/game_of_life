@@ -21,6 +21,8 @@
 
 #define DEF_RESIZE_ADDITION 10
 
+#define MAX_THREADS 2
+
 #ifndef LIFE_CHAR
 #define LIFE_CHAR 1
 #endif

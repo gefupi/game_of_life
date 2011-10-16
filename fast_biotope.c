@@ -6,6 +6,7 @@
 #include <string.h>
 
 
+// private functions
 int fb_init_fields(fast_biotope *this);
 int fb_get_living_neighbours_count(fast_biotope *this, int x, int y);
 char fb_calculate_next_generation_step(fast_biotope *this);
